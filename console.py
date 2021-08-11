@@ -38,7 +38,6 @@ class HBNBCommand(cmd.Cmd):
 
     def precmd(self, line):
         """Reformat command line for advanced command syntax.
-
         Usage: <class name>.<command>([<id> [<*args> or <**kwargs>]])
         (Brackets denote optional fields in usage example.)
         """
@@ -74,7 +73,7 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
-                    if pline[0] is '{' and pline[-1] is'}'\
+                    if pline[0] == '{' and pline[-1] =='}'\
                             and type(eval(pline)) is dict:
                         _args = pline
                     else:
@@ -114,29 +113,49 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
+    def parse_value(self, value):
+        if value[0] == '"':  # string case
+            value = value[1:-1].replace('"', '\"')
+            return value.replace('_', ' ')
+
+        if value.isdigit():  # int case
+            return int(value)
+
+        try:  # case float.
+            return float(value)
+        except:
+            return value
+
+    def parse_args(self, args):
+        data = {}
+        for pair in args[1:]:
+            pair = pair.split('=')
+            key = pair[0]
+            value = pair[1]
+            data.update({key: self.parse_value(value)})
+        return data
+
     def do_create(self, args):
         """ Create an object of any class"""
-        try:
-            if not args:
-                raise SyntaxError()
-            data = args.split(" ")
-            element = eval("{}()".format(data[0]))
-            for item in data[1:]:
-                split = item.split("=")
-                # is a string
-                if split[1][0] == "\"":
-                    split[1] = split[1][1:-1]
-                    split[1] = split[1].replace('_', ' ').replace('"', '\\"')
-                # is a float or int
-                elif split[1].isdigit():
-                    setattr(element, split[0], split[1])
-                setattr(element, split[0], split[1])
-            element.save()
-            print("{}".format(element.id))
-        except SyntaxError:
+        if not args:
             print("** class name missing **")
-        except NameError:
+            return
+        args = args.split(' ')
+        if args[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
+            return
+        new_instance = HBNBCommand.classes[args[0]]()
+        data = self.parse_args(args)
+        for key, value in data.items():
+            setattr(new_instance, key, value)
+
+        if getenv("HBNB_TYPE_STORAGE") == "db":
+            storage.new(new_instance)
+            storage.save()
+        else:
+            new_instance.save()
+
+        print(new_instance.id)
 
     def help_create(self):
         """ Help information for the create method """
