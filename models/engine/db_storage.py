@@ -50,18 +50,15 @@ class DBStorage:
         '''list all the entries of a class if one is pased
             otherwise list all the elementes in the db
         '''
-        objs = {}
-        if cls:
-            my_query = self.__session.query(self.classes[cls]).all()
-            for obj in my_query:
-                objs[cls + "." + obj.id] = obj
-        else:
-            for key, value in self.classes.items():
-                my_query = self.__session.query(value).all()
-                for obj in my_query:
-                    objs[key + "." + obj.id] = obj
+        new_dict = {}
+        for clss in self.classes:
+            if cls is None or cls is self.classes[clss] or cls is clss:
+                objs = self.__session.query(self.classes[clss]).all()
+                for obj in objs:
+                    key = obj.__class__.__name__ + '.' + obj.id
+                    new_dict[key] = obj
+        return (new_dict)
 
-        return objs
 
     def save(self):
         '''Commit the changes'''
@@ -82,4 +79,4 @@ class DBStorage:
 
     def close(self):
         '''finalize the session'''
-        self.__session.remone()
+        self.__session.close()
