@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 
 @app.route('/', strict_slashes=False)
-def main():
+def index():
     return 'Hello HBNB!'
 
 
