@@ -5,9 +5,9 @@
   </head>
   <body>
     <h1>States</h1>
-    {% for state in ess %}
+    {% for state in ess.values() %}
     <li>{{ state.id }}: <b>{{ state.name }}</b></li>
-      {% for city in state.cities.values() %}
+      {% for city in state.cities %}
       <ul>{{ city.id }}: <b>{{ city.name }}</b></ul>
       {% endfor %}
     {% endfor %}
