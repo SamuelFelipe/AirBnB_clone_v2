@@ -5,8 +5,10 @@
   </head>
   <body>
     <h1>States</h1>
-    {% for state in ess.values() %}
-    <li>{{ state.id }}: <b>{{ state.name }}</b></li>
-    {% endfor %}
+    <ul>
+      {% for state in ess.values() %}
+      <li>{{ state.id }}: <b>{{ state.name }}</b></li>
+      {% endfor %}
+    </ul>
   </body>
 </html>
