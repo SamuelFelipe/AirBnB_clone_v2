@@ -6,7 +6,7 @@
   <body>
     <h1>States</h1>
     <ul>
-      {% for state in ess.values() %}
+      {% for name, state in ess|dictsort %}
       <li>{{ state.id }}: <b>{{ state.name }}</b></li>
       {% endfor %}
     </ul>

@@ -17,7 +17,8 @@ def teardown(err):
 @app.route('/cities_by_states', strict_slashes=False)
 def States_list():
     ess = storage.all(State)
-    return render_template('8-cities_by_states.html', ess=ess)
+    dictt = {obj.name:obj for obj in ess.values()}
+    return render_template('8-cities_by_states.html', ess=dictt)
 
 
 if __name__ == '__main__':

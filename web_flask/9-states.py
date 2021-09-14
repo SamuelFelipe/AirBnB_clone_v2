@@ -17,7 +17,11 @@ def teardown(err):
 @app.route('/states', strict_slashes=False)
 def States_list():
     ess = storage.all(State)
-    return render_template('9-states.html', ess=ess)
+    nd = {}
+    for item in ess.values():
+        nd[item.name] = item.id
+    return render_template('7-states_list.html', ess=sorted(nd.items()))
+   return render_template('9-states.html', ess=ess)
 
 
 @app.route('/states/<string:id>', strict_slashes=False)
