@@ -59,7 +59,6 @@ class DBStorage:
                     new_dict[key] = obj
         return (new_dict)
 
-
     def save(self):
         '''Commit the changes'''
         self.__session.commit()

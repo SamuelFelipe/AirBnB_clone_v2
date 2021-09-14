@@ -19,6 +19,7 @@ def States_list():
     ess = storage.all(State)
     return render_template('9-states.html', ess=ess)
 
+
 @app.route('/states/<string:id>', strict_slashes=False)
 def State_id(id):
     ess = storage.all(State)
