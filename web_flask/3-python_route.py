@@ -25,11 +25,14 @@ def Text(text):
     return 'C ' + text.replace('_', ' ')
 
 
+@app.route('/python', strict_slashes=False)
+def Python2():
+    return 'Python is cool'
+
+
 @app.route('/python/<string:text>', strict_slashes=False)
 def Python(text):
-    if text:
-        return 'Python ' + text.replace('_', ' ')
-    return 'Python is cool'
+    return 'Python ' + text.replace('_', ' ')
 
 
 if __name__ == '__main__':
